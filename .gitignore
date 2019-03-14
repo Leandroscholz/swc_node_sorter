@@ -1,0 +1,5 @@
+# ignore iPython / jupyter notebook
+*.ipynb
+
+#ignore things in pychache folder
+__pycache__/*
