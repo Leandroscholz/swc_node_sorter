@@ -1,7 +1,4 @@
 import numpy as np
-import scipy
-
-
 
 def findchildren(swc, parent_id):
     while np.argwhere(swc[:,6] == parent_id).size != 0: 
@@ -99,8 +96,16 @@ def swc_node_sorter(swc_file_path):
     swc = np.loadtxt(swc_file_path)
     new_swc = np.empty(swc.shape)
 
+    # some worflow outputs, such as the one from rivuletpy, have to be fixed
+    # when the node id is its own parent, change parent id to -1 
+    nrows , ncols = swc.shape 
+    for row in range(0,nrows):
+        if swc[row,0] == swc[row,6]:
+            swc[row,6] = -1
+
     first_parents = np.isin(swc[:,6],swc[:,0],invert = True) 
     first_parents = np.logical_or(first_parents,swc[:,6]==-1)
+
     parent_indices = np.argwhere(first_parents == 1)
     row_counter = 0
 
@@ -110,7 +115,7 @@ def swc_node_sorter(swc_file_path):
         print('parent_id to check for children is '+ str(parent_id))
         # call findchildren to get the list of indices of all children of parent_id 
         children_idx_list = findchildren(swc,parent_id)
-        print(children_idx_list)
+        # print(children_idx_list)
         print('children idx list shape')
         print(children_idx_list.shape)
         print('swc shape ')
