@@ -71,15 +71,6 @@ def findchildren(swc, parent_id):
         for i in range(0,unvisited_nodes.size):
             # print('first unvisited node to check is ' + str(unvisited_nodes[i]))
             new_children_nodes = findchildren(swc,swc[unvisited_nodes[i],0])
-
-            # print('new children nodes: ')
-            # print(new_children_nodes)
-            # print(new_children_nodes.size)
-            # print(new_children_nodes.shape)
-            # print('old children nodes: ')
-            # print(children_nodes)
-            # print(children_nodes.size)
-            # print(children_nodes.shape)
             
             if new_children_nodes.size != 0:
                 children_nodes = np.concatenate((children_nodes, new_children_nodes))
@@ -132,4 +123,13 @@ def swc_node_sorter(swc_file_path):
     print(new_swc)
     np.savetxt(swc_file_path[:-4]+'_fixed.swc', new_swc, fmt='%i %i %.2f %.2f %.2f %.2f %i', delimiter=' ')
 
+if __name__ == '__main__':
+    import argparse
 
+    # argument parser
+    ap  = argparse.ArgumentParser()
+    ap.add_argument("-f", "--file_path", required = True, help = "Path to image file")
+    args = vars(ap.parse_args())
+
+    # run swc_node_sorter 
+    swc_node_sorter(args['file_path']) 
